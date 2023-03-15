@@ -1,0 +1,105 @@
+//BIBLIOTECA!!
+
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include"pantalla.h"
+#include"base_datos.h"
+
+
+
+int main(){
+  int i,j,k,num_lectores,num_referencia,continuar;
+  char cad[80];
+  continuar=1;
+  
+  num_lectores=cargar_lect(lectores);
+  if(num_lectores==-1){
+    return 0;
+  }
+  
+  num_referencia=cargar_ref(referencias);
+  if(num_referencia==-1){
+    return 0;
+  }
+
+  base(80,'#');
+  lados(2,80,'#');
+  titulo(80,'#',"BIBLIOTECA");
+  lados(2,80,'#');
+  base(80,'#');
+
+  while(continuar){
+    printf("\n1) Incorporar lector\n2) Agregar referencia\n3) Expresar opinion\n4) Obtener informe\n5) Emitir voto\n6) Calcular nota\n0) Salir\n\nSiguiente comando?\n");
+    
+    fgets(cad,sizeof(cad),stdin);
+    i=strlen(cad);
+    
+    if(cad[i-1] != '\n'){
+      while(fgetc(stdin)!='\n');
+    }
+    
+    j=0;k=0;
+    
+    while(j<i){	
+	if(cad[j]!=' ' && cad[j]!='\n'){
+	  cad[0]=cad[j];
+	  k++;
+	}
+	j++;
+      }
+    
+    if(cad[0]<'0' || cad[0]>'6' || k!=1){
+      printf("\nHas realizado una seleccion no valida\n");
+    }
+    else{
+      switch(cad[0]){
+      case '1':
+	lector(lectores,&num_lectores);
+	break;	
+      case '2':
+	referencia(referencias,&num_referencia);
+	break;	
+      case '3':
+	if(num_lectores==0 || num_referencia==0){
+	  printf("\nOperacion imposible en este momento\n");
+	  break;
+	}
+	opinion(referencias,num_lectores,num_referencia);
+	break;	
+      case '4':
+	if(num_lectores==0 || num_referencia==0){
+	  printf("\nOperacion imposible en este momento\n");
+	  break;
+	}
+	obtinf(referencias, lectores, num_referencia, num_lectores);
+	break;	
+      case '5':
+	if(num_referencia==0){
+	  printf("\nOperacion imposible en este momento\n");
+	  break;
+	}
+	voto(referencias, num_referencia);
+	break;	
+      case '6':
+	if(num_referencia==0){
+	  printf("\nOperacion imposible en este momento\n");
+	  break;
+	}
+	nota(referencias, num_referencia);
+	break;
+      case '0':
+	do{
+	  j=confirmar();
+	  if(j==1){
+	    return 0;
+	  }
+	}while(j==-1);
+	break;	
+      }
+    }
+  }  
+    return 0;
+}
+
